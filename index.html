@@ -299,7 +299,7 @@
     <div id="cart-backdrop" onclick="toggleCartDrawer()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-40">
     </div>
 
-    <!-- Checkout Modal (Matching Image 1) -->
+    <!-- Checkout Modal -->
     <div id="checkout-modal"
         class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-[#121214] border border-gray-800 rounded-3xl w-full max-w-2xl p-8 md:p-10 relative shadow-2xl">
@@ -385,7 +385,7 @@
         </div>
     </div>
 
-    <!-- Invoice Modal (Matching Image 2) -->
+    <!-- Invoice Modal -->
     <div id="invoice-modal"
         class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div
@@ -505,7 +505,6 @@
                     const ref = await addDoc(ordersCol, orderData);
                     const shortId = ref.id.slice(0, 6).toUpperCase();
 
-                    // Populate Invoice
                     document.getElementById('inv-order-id').innerText = 'ORD-' + shortId;
                     document.getElementById('inv-details').innerHTML = `
                         <div class="flex justify-between border-b border-gray-800 pb-2"><span class="text-gray-400">Customer:</span> <span class="text-white font-medium">${orderData.customerName}</span></div>
@@ -555,8 +554,9 @@
                                     ${sizeButtonsHTML}
                                 </div>
                                 <div class="bg-obsidian-800/60 rounded-xl p-3 text-[11px] space-y-1 border border-gold-500/10">
-                                    <div><span class="text-gold-400 font-semibold">Top:</span> ${p.notes?.top || 'N/A'}</div>
-                                                                        <div><span class="text-gold-400 font-semibold">Base:</span> ${p.notes?.base || 'N/A'}</div>
+                                                                        <div><span class="text-gold-400 font-semibold">Top:</span> ${p.notes?.top || 'N/A'}</div>
+                                    <div><span class="text-gold-400 font-semibold">Heart:</span> ${p.notes?.heart || 'N/A'}</div>
+                                    <div><span class="text-gold-400 font-semibold">Base:</span> ${p.notes?.base || 'N/A'}</div>
                                 </div>
                             </div>
                         </div>
@@ -576,21 +576,29 @@
 
         window.changeProductSize = (id, size) => { selectedSizes[id] = size; renderProducts(); };
 
+        // FIXED: This now checks if the item already exists in the cart and increments the quantity
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             if (!p) return;
             const size = selectedSizes[id];
             const price = p.prices[size];
+
+            // Check for existing item
             const existing = cart.find(i => i.id === id && i.size === size);
-            if (existing) existing.qty++;
-            else cart.push({ id: p.id, name: p.name, house: p.house, size, price, qty: 1, image: p.image });
-            saveCart(); updateCartUI();
+
+            if (existing) {
+                existing.qty++; // Increment quantity instead of adding a new row
+            } else {
+                cart.push({ id: p.id, name: p.name, house: p.house, size, price, qty: 1, image: p.image });
+            }
+
+            saveCart();
+            updateCartUI();
             showToast(`Added ${p.name} (${size})`);
         };
 
         function saveCart() { localStorage.setItem('oud_cart', JSON.stringify(cart)); }
 
-        // UPDATED CART UI: Added Delete Button (Trash Icon)
         function updateCartUI() {
             const container = document.getElementById('cart-items-container');
             const badge = document.getElementById('cart-badge');
@@ -634,7 +642,6 @@
             totalEl.innerText = `Rs. ${subtotal.toLocaleString()}`;
         }
 
-        // Function to delete the entire item instantly
         window.removeFromCart = (idx) => {
             cart.splice(idx, 1);
             saveCart();
@@ -691,6 +698,27 @@
                     codBtn.classList.add('opacity-50', 'cursor-not-allowed');
                     codBtn.disabled = true;
                 }
+            }
+        };
+
+        window.selectPaymentMethod = function (method) {
+            selectedPayment = method;
+            const bankBtn = document.getElementById('pay-btn-bank');
+            const codBtn = document.getElementById('pay-btn-cod');
+            const city = document.getElementById('cust-city').value.trim().toLowerCase();
+
+            if (method === 'Bank Transfer') {
+                bankBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
+                if (city === 'colombo') {
+                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
+                    codBtn.disabled = false;
+                } else {
+                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-500 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all opacity-50 cursor-not-allowed';
+                    codBtn.disabled = true;
+                }
+            } else {
+                codBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
+                bankBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
             }
         };
 
