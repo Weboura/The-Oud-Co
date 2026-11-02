@@ -98,7 +98,28 @@
 
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+     <!-- 1. Include Firebase Compat Libraries -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
+<!-- 2. Initialize Firebase with your Config -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqFryRAL-i0DNzyXvki4nfjLcX5EclUzI",
+    authDomain: "theoudco-7955e.firebaseapp.com",
+    projectId: "theoudco-7955e",
+    storageBucket: "theoudco-7955e.firebasestorage.app",
+    messagingSenderId: "18660316570",
+    appId: "1:18660316570:web:e14d768616830632d85623",
+    measurementId: "G-MK1L3F4BW9"
+  };
+
+  // Initialize Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+</script>
     <!-- Navigation Header -->
     <nav
         class="sticky top-0 z-40 bg-obsidian-900/90 backdrop-blur-md border-b border-gold-500/20 px-4 md:px-12 py-4 flex items-center justify-between transition-all">
