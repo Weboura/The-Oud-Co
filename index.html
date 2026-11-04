@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Oud & Co. | Bespoke Perfume Decants & Niche Fragrances</title>
+
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="hcgG951oP_BmB4KnlUdI3AkJkh4iqcQwuI_7qKGR3bY" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -67,6 +71,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #b45309;
         }
+
+        /* Hide default loading text until data arrives */
+        #products-grid:empty {
+            display: none;
+        }
     </style>
 </head>
 
@@ -119,12 +128,11 @@
         </a>
     </div>
 
-    <!-- Hero -->
+    <!-- Hero (Starts pure black, only shows admin uploaded image) -->
     <header class="relative min-h-[80vh] flex items-center justify-center overflow-hidden px-4 py-20 bg-obsidian-900">
+        <!-- Removed the hardcoded default image completely -->
         <div id="hero-bg-container"
-            class="absolute inset-0 z-0 opacity-40 bg-cover bg-center transition-all duration-700"
-            style="background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1800&auto=format&fit=crop');">
-        </div>
+            class="absolute inset-0 z-0 opacity-0 bg-cover bg-center transition-all duration-1000"></div>
         <div class="absolute inset-0 z-0 bg-gradient-to-t from-obsidian-900 via-obsidian-900/70 to-transparent"></div>
 
         <div class="relative z-10 max-w-4xl text-center space-y-6">
@@ -132,14 +140,12 @@
                 class="inline-block border border-gold-500/40 px-4 py-1.5 rounded-full bg-obsidian-800/80 text-gold-300 text-xs uppercase tracking-[0.25em] backdrop-blur-sm">
                 Authentic Niche & Designer Decants
             </div>
+            <!-- Blank text until admin loads it -->
             <h1 id="hero-heading"
                 class="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-wide gold-gradient-text">
-                EXPERIENCE RARE OUD & HAUTE PARFUMERIE
             </h1>
             <p id="hero-subtext"
                 class="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-                Discover world-renowned scents without commitment. Hand-decanted into glass atomizers with surgical
-                precision and gold accent packaging.
             </p>
             <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="#catalog"
@@ -219,9 +225,7 @@
         </div>
 
         <!-- Products Grid -->
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <p class="col-span-full text-center text-gray-500 py-16 animate-pulse">Connecting to live catalog...</p>
-        </div>
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </section>
 
     <!-- Footer -->
@@ -302,82 +306,91 @@
     <!-- Checkout Modal -->
     <div id="checkout-modal"
         class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-[#121214] border border-gray-800 rounded-3xl w-full max-w-2xl p-8 md:p-10 relative shadow-2xl">
-            <button onclick="closeCheckoutModal()"
-                class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+        <div
+            class="bg-[#121214] border border-gray-800 rounded-2xl w-full max-w-xl p-6 relative shadow-2xl max-h-[95vh] overflow-y-auto custom-scrollbar">
 
-            <div class="space-y-1 mb-8">
-                <span class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.2em]">Order Completion</span>
-                <h3 class="font-serif font-bold text-3xl text-white">Checkout Details</h3>
+            <!-- Top Header with Back Button -->
+            <div class="flex justify-between items-start mb-5">
+                <div class="space-y-1">
+                    <span class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.2em]">Order Completion</span>
+                    <h3 class="font-serif font-bold text-2xl text-white">Checkout Details</h3>
+                </div>
+                <!-- Back to Cart Button -->
+                <button onclick="backToCart()"
+                    class="text-gray-400 hover:text-white flex items-center gap-2 text-[10px] uppercase tracking-wider font-semibold transition-colors mt-1 bg-[#1a1a1e] px-3 py-1.5 rounded-lg border border-gray-800">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Cart
+                </button>
             </div>
 
-            <form id="checkout-form" class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form id="checkout-form" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Full
+                        <label
+                            class="block text-[10px] uppercase text-gray-400 mb-1.5 tracking-wider font-semibold">Full
                             Name *</label>
                         <input type="text" id="cust-name" required
-                            class="w-full bg-[#1a1a1e] border border-gray-800 rounded-xl p-3.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
+                            class="w-full bg-[#1a1a1e] border border-gray-800 rounded-lg p-2.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Email
+                        <label
+                            class="block text-[10px] uppercase text-gray-400 mb-1.5 tracking-wider font-semibold">Email
                             Address (Optional)</label>
                         <input type="email" id="cust-email"
-                            class="w-full bg-[#1a1a1e] border border-gray-800 rounded-xl p-3.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
+                            class="w-full bg-[#1a1a1e] border border-gray-800 rounded-lg p-2.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Delivery
+                    <label
+                        class="block text-[10px] uppercase text-gray-400 mb-1.5 tracking-wider font-semibold">Delivery
                         City *</label>
                     <input type="text" id="cust-city" required oninput="checkCityForCOD()" placeholder="e.g. Colombo"
-                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-xl p-3.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
+                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-lg p-2.5 text-sm text-white focus:border-gold-500 outline-none transition-colors">
                 </div>
 
                 <div>
-                    <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Sri
+                    <label class="block text-[10px] uppercase text-gray-400 mb-1.5 tracking-wider font-semibold">Sri
                         Lankan Contact Number (10 Digits) *</label>
                     <input type="tel" id="cust-phone" required maxlength="10" oninput="validateSLPhoneNumber(this)"
                         placeholder="0789491209"
-                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-xl p-3.5 text-sm text-white focus:border-gold-500 outline-none tracking-wider transition-colors">
+                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-lg p-2.5 text-sm text-white focus:border-gold-500 outline-none tracking-wider transition-colors">
                 </div>
 
                 <div>
-                    <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Shipping
+                    <label
+                        class="block text-[10px] uppercase text-gray-400 mb-1.5 tracking-wider font-semibold">Shipping
                         Address *</label>
-                    <textarea id="cust-address" required rows="3" placeholder="Street, Apartment / House No."
-                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-xl p-3.5 text-sm text-white focus:border-gold-500 outline-none resize-none transition-colors"></textarea>
+                    <textarea id="cust-address" required rows="2" placeholder="Street, Apartment / House No."
+                        class="w-full bg-[#1a1a1e] border border-gray-800 rounded-lg p-2.5 text-sm text-white focus:border-gold-500 outline-none resize-none transition-colors"></textarea>
                 </div>
 
-                <div class="pt-2">
-                    <label class="block text-[10px] uppercase text-gray-400 mb-3 tracking-wider font-semibold">Select
+                <div class="pt-1">
+                    <label class="block text-[10px] uppercase text-gray-400 mb-2 tracking-wider font-semibold">Select
                         Payment Method</label>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-3">
                         <button type="button" id="pay-btn-bank" onclick="selectPaymentMethod('Bank Transfer')"
-                            class="border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
+                            class="border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
                             <i class="fa-solid fa-building-columns"></i> Bank Transfer
                         </button>
                         <button type="button" id="pay-btn-cod" onclick="selectPaymentMethod('Cash on Delivery')"
                             disabled
-                            class="border border-gray-800 bg-[#1a1a1e] text-gray-500 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all opacity-50 cursor-not-allowed">
+                            class="border border-gray-800 bg-[#1a1a1e] text-gray-500 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all opacity-50 cursor-not-allowed">
                             <i class="fa-solid fa-hand-holding-dollar"></i> Cash on Delivery
                         </button>
                     </div>
-                    <p id="cod-notice" class="text-[11px] text-gold-500 mt-3 flex items-center gap-2"><i
+                    <p id="cod-notice" class="text-[10px] text-gold-500 mt-2 flex items-center gap-1.5"><i
                             class="fa-solid fa-circle-info"></i> Cash on Delivery is available exclusively inside
                         Colombo.</p>
                 </div>
 
-                <div class="border-t border-gray-800 pt-6 mt-6 flex items-center justify-between">
+                <div class="border-t border-gray-800 pt-4 mt-2 flex items-center justify-between">
                     <div>
-                        <span class="text-xs text-gray-400 block mb-1">Total Payable:</span>
-                        <span id="checkout-total-val" class="font-serif font-bold text-3xl gold-gradient-text">Rs.
+                        <span class="text-[11px] text-gray-400 block mb-0.5">Total Payable:</span>
+                        <span id="checkout-total-val" class="font-serif font-bold text-2xl gold-gradient-text">Rs.
                             0</span>
                     </div>
                     <button type="submit"
-                        class="bg-gradient-to-r from-gold-500 to-gold-700 text-black font-bold px-10 py-4 rounded-full hover:brightness-110 transition-all uppercase tracking-widest text-xs shadow-lg shadow-gold-500/20">
+                        class="bg-gradient-to-r from-gold-500 to-gold-700 text-black font-bold px-6 py-3 rounded-full hover:brightness-110 transition-all uppercase tracking-widest text-[11px] shadow-lg shadow-gold-500/20">
                         Confirm Order
                     </button>
                 </div>
@@ -389,30 +402,30 @@
     <div id="invoice-modal"
         class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div
-            class="bg-[#121214] border border-gray-800 rounded-3xl w-full max-w-lg p-8 md:p-10 relative shadow-2xl space-y-8 text-center">
+            class="bg-[#121214] border border-gray-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-6 text-center max-h-[95vh] overflow-y-auto custom-scrollbar">
 
             <div
-                class="w-20 h-20 bg-emerald-500/10 border-4 border-emerald-500/20 rounded-full flex items-center justify-center text-emerald-500 text-3xl mx-auto">
+                class="w-16 h-16 bg-emerald-500/10 border-4 border-emerald-500/20 rounded-full flex items-center justify-center text-emerald-500 text-2xl mx-auto">
                 <i class="fa-solid fa-check"></i>
             </div>
 
             <div
-                class="bg-gold-500/10 border border-gold-500/20 rounded-xl p-4 text-gold-400 text-sm font-medium flex items-center justify-center gap-3">
+                class="bg-gold-500/10 border border-gold-500/20 rounded-xl p-3 text-gold-400 text-xs font-medium flex items-center justify-center gap-2">
                 <i class="fa-solid fa-paper-plane"></i>
                 <span>The Oud & Co. team will message the number you have entered to confirm order.</span>
             </div>
 
-            <div class="space-y-2">
-                <h3 class="font-serif font-bold text-3xl text-white">Order Received!</h3>
-                <p class="text-sm text-gray-400">Order Reference: <span id="inv-order-id"
+            <div class="space-y-1">
+                <h3 class="font-serif font-bold text-2xl text-white">Order Received!</h3>
+                <p class="text-xs text-gray-400">Order Reference: <span id="inv-order-id"
                         class="text-gold-500 font-mono font-bold">#ORD-0000</span></p>
             </div>
 
             <div id="inv-details"
-                class="bg-[#1a1a1e] border border-gray-800 rounded-xl p-6 text-left text-sm space-y-3"></div>
+                class="bg-[#1a1a1e] border border-gray-800 rounded-xl p-4 text-left text-xs space-y-2"></div>
 
             <button onclick="closeInvoiceModal()"
-                class="w-full bg-gradient-to-r from-gold-500 to-gold-700 hover:brightness-110 text-black font-bold py-4 rounded-full uppercase tracking-widest text-xs transition-all shadow-lg shadow-gold-500/20">
+                class="w-full bg-gradient-to-r from-gold-500 to-gold-700 hover:brightness-110 text-black font-bold py-3 rounded-full uppercase tracking-widest text-[11px] transition-all shadow-lg shadow-gold-500/20">
                 Back to Storefront
             </button>
         </div>
@@ -473,7 +486,14 @@
                     const cfg = snap.data();
                     if (cfg.heroTitle) document.getElementById('hero-heading').innerText = cfg.heroTitle;
                     if (cfg.heroSubtext) document.getElementById('hero-subtext').innerText = cfg.heroSubtext;
-                    if (cfg.heroImage) document.getElementById('hero-bg-container').style.backgroundImage = `url('${cfg.heroImage}')`;
+
+                    // Fade in the custom background image ONLY if it exists in database
+                    if (cfg.heroImage) {
+                        const bgContainer = document.getElementById('hero-bg-container');
+                        bgContainer.style.backgroundImage = `url('${cfg.heroImage}')`;
+                        bgContainer.classList.remove('opacity-0');
+                        bgContainer.classList.add('opacity-40');
+                    }
                 }
             });
 
@@ -507,11 +527,11 @@
 
                     document.getElementById('inv-order-id').innerText = 'ORD-' + shortId;
                     document.getElementById('inv-details').innerHTML = `
-                        <div class="flex justify-between border-b border-gray-800 pb-2"><span class="text-gray-400">Customer:</span> <span class="text-white font-medium">${orderData.customerName}</span></div>
-                        <div class="flex justify-between border-b border-gray-800 pb-2"><span class="text-gray-400">Phone:</span> <span class="text-white font-medium">${orderData.phone}</span></div>
-                        <div class="flex justify-between border-b border-gray-800 pb-2"><span class="text-gray-400">City:</span> <span class="text-white font-medium">${orderData.city}</span></div>
-                        <div class="flex justify-between border-b border-gray-800 pb-2"><span class="text-gray-400">Payment Method:</span> <span class="text-white font-medium">${orderData.payment}</span></div>
-                        <div class="flex justify-between pt-2"><span class="text-gold-500 font-bold">Total Amount:</span> <span class="text-gold-500 font-bold">Rs. ${subtotal.toLocaleString()}</span></div>
+                        <div class="flex justify-between border-b border-gray-800 pb-1.5"><span class="text-gray-400">Customer:</span> <span class="text-white font-medium">${orderData.customerName}</span></div>
+                        <div class="flex justify-between border-b border-gray-800 pb-1.5"><span class="text-gray-400">Phone:</span> <span class="text-white font-medium">${orderData.phone}</span></div>
+                        <div class="flex justify-between border-b border-gray-800 pb-1.5"><span class="text-gray-400">City:</span> <span class="text-white font-medium">${orderData.city}</span></div>
+                        <div class="flex justify-between border-b border-gray-800 pb-1.5"><span class="text-gray-400">Payment Method:</span> <span class="text-white font-medium">${orderData.payment}</span></div>
+                        <div class="flex justify-between pt-1.5"><span class="text-gold-500 font-bold">Total Amount:</span> <span class="text-gold-500 font-bold">Rs. ${subtotal.toLocaleString()}</span></div>
                     `;
 
                     closeCheckoutModal();
@@ -554,7 +574,7 @@
                                     ${sizeButtonsHTML}
                                 </div>
                                 <div class="bg-obsidian-800/60 rounded-xl p-3 text-[11px] space-y-1 border border-gold-500/10">
-                                                                        <div><span class="text-gold-400 font-semibold">Top:</span> ${p.notes?.top || 'N/A'}</div>
+                                    <div><span class="text-gold-400 font-semibold">Top:</span> ${p.notes?.top || 'N/A'}</div>
                                     <div><span class="text-gold-400 font-semibold">Heart:</span> ${p.notes?.heart || 'N/A'}</div>
                                     <div><span class="text-gold-400 font-semibold">Base:</span> ${p.notes?.base || 'N/A'}</div>
                                 </div>
@@ -576,24 +596,15 @@
 
         window.changeProductSize = (id, size) => { selectedSizes[id] = size; renderProducts(); };
 
-        // FIXED: This now checks if the item already exists in the cart and increments the quantity
         window.addToCart = (id) => {
             const p = products.find(x => x.id === id);
             if (!p) return;
             const size = selectedSizes[id];
             const price = p.prices[size];
-
-            // Check for existing item
             const existing = cart.find(i => i.id === id && i.size === size);
-
-            if (existing) {
-                existing.qty++; // Increment quantity instead of adding a new row
-            } else {
-                cart.push({ id: p.id, name: p.name, house: p.house, size, price, qty: 1, image: p.image });
-            }
-
-            saveCart();
-            updateCartUI();
+            if (existing) existing.qty++;
+            else cart.push({ id: p.id, name: p.name, house: p.house, size, price, qty: 1, image: p.image });
+            saveCart(); updateCartUI();
             showToast(`Added ${p.name} (${size})`);
         };
 
@@ -604,13 +615,11 @@
             const badge = document.getElementById('cart-badge');
             const totalEl = document.getElementById('cart-total-price');
             badge.innerText = cart.reduce((s, i) => s + i.qty, 0);
-
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-center text-gray-500 text-xs py-10">Your decant collection is empty.</p>`;
                 totalEl.innerText = 'Rs. 0';
                 return;
             }
-
             let subtotal = 0;
             container.innerHTML = cart.map((item, idx) => {
                 const itemTotal = item.price * item.qty;
@@ -625,13 +634,11 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <!-- Quantity Controls -->
                             <div class="flex items-center gap-2">
                                 <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 bg-obsidian-900 text-gray-400 rounded hover:text-gold-400 text-xs">-</button>
                                 <span class="text-xs font-bold text-white w-4 text-center">${item.qty}</span>
                                 <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 bg-obsidian-900 text-gray-400 rounded hover:text-gold-400 text-xs">+</button>
                             </div>
-                            <!-- Trash / Delete Button -->
                             <button onclick="removeFromCart(${idx})" class="text-red-500 hover:text-red-400 ml-1 transition-colors" title="Remove item">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
@@ -669,7 +676,9 @@
 
         window.openCheckoutModal = function () {
             if (cart.length === 0) { showToast("Please add perfumes to your cart first!"); return; }
-            toggleCartDrawer();
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+            document.getElementById('cart-backdrop').classList.add('hidden');
+
             const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
             document.getElementById('checkout-total-val').innerText = `Rs. ${subtotal.toLocaleString()}`;
             document.getElementById('checkout-modal').classList.remove('hidden');
@@ -677,6 +686,11 @@
 
         window.closeCheckoutModal = function () {
             document.getElementById('checkout-modal').classList.add('hidden');
+        };
+
+        window.backToCart = function () {
+            closeCheckoutModal();
+            toggleCartDrawer();
         };
 
         window.closeInvoiceModal = function () {
@@ -708,17 +722,17 @@
             const city = document.getElementById('cust-city').value.trim().toLowerCase();
 
             if (method === 'Bank Transfer') {
-                bankBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
+                bankBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
                 if (city === 'colombo') {
-                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
+                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
                     codBtn.disabled = false;
                 } else {
-                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-500 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all opacity-50 cursor-not-allowed';
+                    codBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-500 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all opacity-50 cursor-not-allowed';
                     codBtn.disabled = true;
                 }
             } else {
-                codBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
-                bankBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
+                codBtn.className = 'border border-gold-500 bg-gold-500/10 text-gold-400 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all';
+                bankBtn.className = 'border border-gray-800 bg-[#1a1a1e] text-gray-300 font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-gold-500/50';
             }
         };
 
